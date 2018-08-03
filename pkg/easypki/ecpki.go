@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package easypki provides helpers to manage a Public Key Infrastructure.
+// Package ecpki provides helpers to manage a Public Key Infrastructure.
 package easypki
 
 import (

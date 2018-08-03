@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Command easypki provides a simple client to manage a local PKI.
+// Command ecpki provides a simple client to manage a local PKI.
 package main
 
 import (
@@ -153,7 +153,7 @@ func (r *router) crl(c *cli.Context) {
 
 func (r *router) run() {
 	app := cli.NewApp()
-	app.Name = "easypki"
+	app.Name = "ecpki"
 	app.Usage = "Manage pki"
 	app.Author = "Jeremy Clerc"
 	app.Email = "jeremy@clerc.io"
