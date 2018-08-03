@@ -19,7 +19,7 @@ import (
 	"crypto/x509/pkix"
 	"math/big"
 
-	"github.com/google/easypki/pkg/certificate"
+	"github.com/agileinsider/easypki/pkg/certificate"
 )
 
 // Store reprents a way to store a Certificate Authority.

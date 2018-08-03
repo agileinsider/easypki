@@ -23,7 +23,7 @@ import (
 	"fmt"
 
 	"github.com/boltdb/bolt"
-	"github.com/google/easypki/pkg/certificate"
+	"github.com/agileinsider/easypki/pkg/certificate"
 )
 
 var (

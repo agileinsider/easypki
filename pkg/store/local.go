@@ -29,7 +29,7 @@ import (
 
 	"crypto/x509"
 
-	"github.com/google/easypki/pkg/certificate"
+	"github.com/agileinsider/easypki/pkg/certificate"
 )
 
 // Predifined directory names.
@@ -130,7 +130,7 @@ func (l *Local) writeBundle(caName, name string, isCa bool, key, cert []byte) er
 		}
 	}
 	keyPath, certPath := l.path(caName, name)
-	if err := encodeAndWrite(keyPath, "RSA PRIVATE KEY", key); err != nil {
+	if err := encodeAndWrite(keyPath, "EC PRIVATE KEY", key); err != nil {
 		return fmt.Errorf("failed encoding and writing private key file: %v", err)
 	}
 	if err := encodeAndWrite(certPath, "CERTIFICATE", cert); err != nil {

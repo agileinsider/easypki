@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
-	"github.com/google/easypki/pkg/store"
+	"github.com/agileinsider/easypki/pkg/store"
 
 	"reflect"
 )
@@ -36,7 +36,7 @@ func TestLocalE2E(t *testing.T) {
 	}
 	defer os.RemoveAll(root)
 
-	E2E(t, &EasyPKI{Store: &store.Local{Root: root}})
+	E2E(t, &EcPki{Store: &store.Local{Root: root}})
 }
 
 func TestBoltE2E(t *testing.T) {
@@ -50,12 +50,12 @@ func TestBoltE2E(t *testing.T) {
 		t.Fatalf("failed opening temp boltdb: %v", err)
 	}
 	defer db.Close()
-	E2E(t, &EasyPKI{Store: &store.Bolt{DB: db}})
+	E2E(t, &EcPki{Store: &store.Bolt{DB: db}})
 }
 
 // E2E provides a frameweork to run tests end to end using a different
 // store backend.
-func E2E(t *testing.T, pki *EasyPKI) {
+func E2E(t *testing.T, pki *EcPki) {
 	commonSubject := pkix.Name{
 		Organization:       []string{"Acme Inc."},
 		OrganizationalUnit: []string{"IT"},
@@ -134,7 +134,6 @@ func E2E(t *testing.T, pki *EasyPKI) {
 			DNSNames:    []string{"wiki.acme.org"},
 			IPAddresses: []net.IP{net.ParseIP("10.10.10.10")},
 		},
-		PrivateKeySize: 4096,
 	}
 	srvRequest.Template.Subject.CommonName = "wiki.acme.org"
 	if err := pki.Sign(intCA, srvRequest); err != nil {

@@ -110,7 +110,6 @@ func (r *router) create(c *cli.Context) {
 		Name:                filename,
 		Template:            template,
 		IsClientCertificate: c.Bool("client"),
-		PrivateKeySize:      c.Int("private-key-size"),
 	}
 	if err := r.PKI.Sign(signer, req); err != nil {
 		log.Fatal(err)
@@ -224,11 +223,6 @@ func (r *router) run() {
 					Name:  "expire",
 					Usage: "expiration limit in days",
 					Value: 365,
-				},
-				cli.IntFlag{
-					Name:  "private-key-size",
-					Usage: "size of the private key (default: 2048)",
-					Value: 2048,
 				},
 				cli.StringFlag{
 					Name:  "filename",

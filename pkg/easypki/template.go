@@ -17,22 +17,19 @@ package easypki
 import (
 	"crypto"
 	"crypto/rand"
-	"crypto/rsa"
-	"crypto/sha1"
 	"crypto/x509"
-	"encoding/asn1"
 	"fmt"
 	"math/big"
 	"time"
 )
 
 func defaultTemplate(genReq *Request, publicKey crypto.PublicKey) error {
-	publicKeyBytes, err := asn1.Marshal(*publicKey.(*rsa.PublicKey))
-	if err != nil {
-		return fmt.Errorf("failed marshaling public key: %v", err)
-	}
-	subjectKeyID := sha1.Sum(publicKeyBytes)
-	genReq.Template.SubjectKeyId = subjectKeyID[:]
+	//publicKeyBytes, err := asn1.Marshal(*publicKey.(*rsa.PublicKey))
+	//if err != nil {
+	//	return fmt.Errorf("failed marshaling public key: %v", err)
+	//}
+	//subjectKeyID := sha1.Sum(publicKeyBytes)
+	//genReq.Template.SubjectKeyId = subjectKeyID[:]
 
 	// Random serial number.
 	snLimit := new(big.Int).Lsh(big.NewInt(1), 128)
@@ -43,7 +40,7 @@ func defaultTemplate(genReq *Request, publicKey crypto.PublicKey) error {
 	genReq.Template.SerialNumber = sn
 
 	genReq.Template.NotBefore = time.Now()
-	genReq.Template.SignatureAlgorithm = x509.SHA256WithRSA
+	genReq.Template.SignatureAlgorithm = x509.ECDSAWithSHA256
 	return nil
 }
 

@@ -12,9 +12,9 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/go-yaml/yaml"
-	"github.com/google/easypki/pkg/certificate"
-	"github.com/google/easypki/pkg/easypki"
-	"github.com/google/easypki/pkg/store"
+	"github.com/agileinsider/easypki/pkg/certificate"
+	"github.com/agileinsider/easypki/pkg/easypki"
+	"github.com/agileinsider/easypki/pkg/store"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		log.Fatalf("Failed opening bolt database %v: %v", *dbPath, err)
 	}
 	defer db.Close()
-	pki := &easypki.EasyPKI{Store: &store.Bolt{DB: db}}
+	pki := &easypki.EcPki{Store: &store.Bolt{DB: db}}
 	if *bundleName != "" {
 		get(pki, *caName, *bundleName, *fullChain)
 		return
@@ -46,7 +46,7 @@ func main() {
 }
 
 // build create a full PKI based on a yaml configuration.
-func build(pki *easypki.EasyPKI, configPath string) {
+func build(pki *easypki.EcPki, configPath string) {
 	type configCerts struct {
 		Name           string        `yaml:"name"`
 		CommonName     string        `yaml:"commonName"`
@@ -102,7 +102,7 @@ func build(pki *easypki.EasyPKI, configPath string) {
 
 // get retrieves a bundle from the bolt database. If fullChain is true, the
 // certificate will be the chain of trust from the primary tup to root CA.
-func get(pki *easypki.EasyPKI, caName, bundleName string, fullChain bool) {
+func get(pki *easypki.EcPki, caName, bundleName string, fullChain bool) {
 	var bundle *certificate.Bundle
 	if caName == "" {
 		caName = bundleName
@@ -130,9 +130,13 @@ func get(pki *easypki.EasyPKI, caName, bundleName string, fullChain bool) {
 	if err != nil {
 		log.Fatalf("Failed creating key output file: %v", err)
 	}
+	bytes, err := x509.MarshalECPrivateKey(bundle.Key)
+	if err != nil {
+		log.Fatalf("Failed loading private key: %v", err)
+	}
 	if err := pem.Encode(key, &pem.Block{
-		Bytes: x509.MarshalPKCS1PrivateKey(bundle.Key),
-		Type:  "RSA PRIVATE KEY",
+		Bytes: bytes,
+		Type:  "EC PRIVATE KEY",
 	}); err != nil {
 		log.Fatalf("Failed ecoding private key: %v", err)
 	}
