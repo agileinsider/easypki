@@ -154,10 +154,10 @@ func (r *router) crl(c *cli.Context) {
 func (r *router) run() {
 	app := cli.NewApp()
 	app.Name = "ecpki"
-	app.Usage = "Manage pki"
-	app.Author = "Jeremy Clerc"
-	app.Email = "jeremy@clerc.io"
-	app.Version = "1.0.0"
+	app.Usage = "Manage pki with eliptical curves"
+	app.Author = "Jeremy Clerc - hacked by Agile Insider"
+	app.Email = "jeremy@clerc.io - with hacking by agileinsider@gmail.com"
+	app.Version = "0.0.1"
 
 	caNameFlag := cli.StringFlag{
 		Name:  "ca-name",
