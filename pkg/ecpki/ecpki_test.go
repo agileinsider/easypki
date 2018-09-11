@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package easypki
+package ecpki
 
 import (
 	"crypto/x509"
@@ -23,8 +23,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/boltdb/bolt"
 	"github.com/agileinsider/easypki/pkg/store"
+	"github.com/boltdb/bolt"
 
 	"reflect"
 )

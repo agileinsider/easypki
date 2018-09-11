@@ -10,11 +10,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/agileinsider/easypki/pkg/certificate"
+	"github.com/agileinsider/easypki/pkg/ecpki"
+	"github.com/agileinsider/easypki/pkg/store"
 	"github.com/boltdb/bolt"
 	"github.com/go-yaml/yaml"
-	"github.com/agileinsider/easypki/pkg/certificate"
-	"github.com/agileinsider/easypki/pkg/easypki"
-	"github.com/agileinsider/easypki/pkg/store"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		log.Fatalf("Failed opening bolt database %v: %v", *dbPath, err)
 	}
 	defer db.Close()
-	pki := &easypki.EcPki{Store: &store.Bolt{DB: db}}
+	pki := &ecpki.EcPki{Store: &store.Bolt{DB: db}}
 	if *bundleName != "" {
 		get(pki, *caName, *bundleName, *fullChain)
 		return
@@ -46,7 +46,7 @@ func main() {
 }
 
 // build create a full PKI based on a yaml configuration.
-func build(pki *easypki.EcPki, configPath string) {
+func build(pki *ecpki.EcPki, configPath string) {
 	type configCerts struct {
 		Name           string        `yaml:"name"`
 		CommonName     string        `yaml:"commonName"`
@@ -72,7 +72,7 @@ func build(pki *easypki.EcPki, configPath string) {
 		log.Fatalf("Failed umarshaling yaml config (%v) %v: %v", configPath, string(b), err)
 	}
 	for _, cert := range conf.Certs {
-		req := &easypki.Request{
+		req := &ecpki.Request{
 			Name: cert.Name,
 			Template: &x509.Certificate{
 				Subject:        conf.Subject,
@@ -102,7 +102,7 @@ func build(pki *easypki.EcPki, configPath string) {
 
 // get retrieves a bundle from the bolt database. If fullChain is true, the
 // certificate will be the chain of trust from the primary tup to root CA.
-func get(pki *easypki.EcPki, caName, bundleName string, fullChain bool) {
+func get(pki *ecpki.EcPki, caName, bundleName string, fullChain bool) {
 	var bundle *certificate.Bundle
 	if caName == "" {
 		caName = bundleName

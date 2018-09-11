@@ -13,7 +13,7 @@
 // limitations under the License.
 
 // Package ecpki provides helpers to manage a Public Key Infrastructure.
-package easypki
+package ecpki
 
 import (
 	"crypto/rand"
@@ -22,10 +22,10 @@ import (
 	"fmt"
 	"time"
 
+	"crypto/ecdsa"
+	"crypto/elliptic"
 	"github.com/agileinsider/easypki/pkg/certificate"
 	"github.com/agileinsider/easypki/pkg/store"
-	"crypto/elliptic"
-	"crypto/ecdsa"
 )
 
 // Signing errors.
@@ -110,7 +110,7 @@ func (e *EcPki) Sign(signer *certificate.Bundle, req *Request) error {
 	}
 
 	keyBytes, error := x509.MarshalECPrivateKey(privateKey)
-	if (error != nil) {
+	if error != nil {
 		return fmt.Errorf("failed saving generated bundle: %v", err)
 	}
 	if err := e.Store.Add(signer.Name, req.Name, req.Template.IsCA, keyBytes, rawCert); err != nil {

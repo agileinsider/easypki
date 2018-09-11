@@ -28,10 +28,10 @@ import (
 
 	"encoding/pem"
 
+	"github.com/agileinsider/easypki/pkg/certificate"
+	"github.com/agileinsider/easypki/pkg/ecpki"
+	"github.com/agileinsider/easypki/pkg/store"
 	"github.com/codegangsta/cli"
-	"github.com/google/easypki/pkg/certificate"
-	"github.com/google/easypki/pkg/easypki"
-	"github.com/google/easypki/pkg/store"
 )
 
 const (
@@ -39,7 +39,7 @@ const (
 )
 
 type router struct {
-	PKI *easypki.EasyPKI
+	PKI *ecpki.EcPki
 }
 
 func (r *router) create(c *cli.Context) {
@@ -106,7 +106,7 @@ func (r *router) create(c *cli.Context) {
 		template.DNSNames = c.StringSlice("dns")
 	}
 
-	req := &easypki.Request{
+	req := &ecpki.Request{
 		Name:                filename,
 		Template:            template,
 		IsClientCertificate: c.Bool("client"),
@@ -270,6 +270,6 @@ func (r *router) run() {
 }
 
 func main() {
-	r := router{PKI: &easypki.EasyPKI{Store: &store.Local{}}}
+	r := router{PKI: &ecpki.EcPki{Store: &store.Local{}}}
 	r.run()
 }
